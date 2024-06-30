@@ -1,3 +1,3 @@
-package services
+package clients
 
 // Tüke Busz Zrt. (TükeBusz) API
