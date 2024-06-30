@@ -3,9 +3,14 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"qwit.dev/qwitravel-api/handlers"
+	"qwit.dev/qwitravel-api/utils"
 )
 
 func main() {
+	// call setenv.go to set environment variables
+	// NEVER PUBLISH setenv.go TO GITHUB
+	utils.SetEnv()
+
 	app := fiber.New(fiber.Config{
 		Prefork:      true,
 		ServerHeader: "Fiber",
