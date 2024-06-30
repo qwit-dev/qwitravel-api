@@ -25,6 +25,16 @@ func Endpoints(c *fiber.Ctx) error {
 					"methods":     []string{"GET"},
 					"description": "List of all available endpoints",
 				},
+				{
+					"path":        "/version",
+					"methods":     []string{"GET"},
+					"description": "API version information",
+				},
+				{
+					"path":        "/stops/schedule",
+					"methods":     []string{"GET"},
+					"description": "Get schedule for a specific stop",
+				},
 			},
 		},
 	})
