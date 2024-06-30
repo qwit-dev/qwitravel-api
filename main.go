@@ -11,6 +11,7 @@ func main() {
 	// base routes
 	app.Get("/", handlers.Home)
 	app.Get("/endpoints", handlers.Endpoints)
+	app.Get("/version", handlers.Version)
 
 	err := app.Listen(":3002")
 	if err != nil {
