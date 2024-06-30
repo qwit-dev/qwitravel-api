@@ -9,10 +9,11 @@ import (
 
 func GetStopSchedule(c *fiber.Ctx) error {
 	var provider string = c.Query("provider", "")
-	var stopIds []string = strings.Split(c.Query("stop_ids"), ",")
+	var stopIdsQuery string = c.Query("stop_ids", "")
+	var stopIds []string = strings.Split(stopIdsQuery, ",")
 	var date string = c.Query("date", "")
 
-	if len(stopIds) == 0 {
+	if stopIdsQuery == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Missing or invalid \"stop_ids\" parameter!",
