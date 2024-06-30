@@ -24,7 +24,8 @@ func BKKGetStopSchedule(stopIds []string, date string) (int, models.BKKStopSched
 	}
 
 	if date == "" {
-		date = strings.ReplaceAll(time.Now().Format("2007-09-05"), "-", "")
+		currentTime := time.Now()
+		date = strings.ReplaceAll(currentTime.Format("2006#01#02"), "#", "")
 	}
 
 	var finalData models.BKKStopSchedule
@@ -49,6 +50,10 @@ func BKKGetStopSchedule(stopIds []string, date string) (int, models.BKKStopSched
 	if err != nil {
 		fmt.Println(err)
 		return fiber.ErrInternalServerError.Code, models.BKKStopSchedule{}
+	}
+
+	if resp.StatusCode != 200 {
+		return resp.StatusCode, models.BKKStopSchedule{}
 	}
 
 	defer resp.Body.Close()
