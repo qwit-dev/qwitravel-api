@@ -17,6 +17,10 @@ func main() {
 	app.Get("/endpoints", handlers.Endpoints)
 	app.Get("/version", handlers.Version)
 
+	// stop related routes
+	stops := app.Group("/stops")
+	stops.Get("/schedule", handlers.GetStopSchedule)
+
 	// start the server
 	err := app.Listen(":3002")
 	if err != nil {
