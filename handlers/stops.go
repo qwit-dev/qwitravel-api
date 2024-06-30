@@ -52,8 +52,8 @@ func GetStopArrivalsAndDepartures(c *fiber.Ctx) error {
 	var provider string = c.Query("provider", "")
 	var stopIdsQuery string = c.Query("stop_ids", "")
 	var stopIds []string = strings.Split(stopIdsQuery, ",")
-	var tripIdsQuery string = c.Query("trip_ids", "")
-	var tripIds []string = strings.Split(tripIdsQuery, ",")
+	var routeIdsQuery string = c.Query("route_ids", "")
+	var routeIds []string = strings.Split(routeIdsQuery, ",")
 	var dateTimeStr string = c.Query("time", "")
 	dateTime, err := strconv.ParseInt(dateTimeStr, 10, 64)
 
@@ -76,13 +76,13 @@ func GetStopArrivalsAndDepartures(c *fiber.Ctx) error {
 		})
 	}
 
-	if tripIdsQuery == "" {
-		tripIds = []string{}
+	if routeIdsQuery == "" {
+		routeIds = []string{}
 	}
 
 	if strings.ToLower(provider) == "bkk" {
 		// get stop arrivals and departures from BKK
-		status, bkkStopArrivalsAndDepartures := clients.BKKGetStopArrivalsAndDepartures(stopIds, dateTime, tripIds)
+		status, bkkStopArrivalsAndDepartures := clients.BKKGetStopArrivalsAndDepartures(stopIds, dateTime, routeIds)
 		if status != fiber.StatusOK {
 			return c.Status(status).JSON(fiber.Map{
 				"status":  "error",

@@ -72,8 +72,8 @@ func BKKGetStopSchedule(stopIds []string, date string) (int, models.BKKStopSched
 	return fiber.StatusOK, finalData
 }
 
-func BKKGetStopArrivalsAndDepartures(stopIds []string, dateTime int64, tripIds []string) (int, models.BKKStopArrivalsAndDepartures) {
-	if len(stopIds) == 0 || len(tripIds) == 0 {
+func BKKGetStopArrivalsAndDepartures(stopIds []string, dateTime int64, routeIds []string) (int, models.BKKStopArrivalsAndDepartures) {
+	if len(stopIds) == 0 || len(routeIds) == 0 {
 		return fiber.ErrBadRequest.Code, models.BKKStopArrivalsAndDepartures{}
 	}
 
@@ -88,7 +88,7 @@ func BKKGetStopArrivalsAndDepartures(stopIds []string, dateTime int64, tripIds [
 		"GET",
 		apis.BKKStopArrivalsAndDepartures+
 			"?stopId="+stopIds[0]+
-			"&includeRouteId="+tripIds[0]+
+			"&includeRouteId="+routeIds[0]+
 			"&time="+fmt.Sprint(dateTime)+
 			"&minutesBefore=2&minutesAfter=30&limit=100&onlyDepartures=false&radius=100&appVersion=1.0.0&version=4&includeReferences=routes,alerts"+
 			"&key="+os.Getenv("BKK_API_KEY"),
