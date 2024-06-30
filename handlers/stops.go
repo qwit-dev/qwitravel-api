@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -38,6 +39,59 @@ func GetStopSchedule(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"status": "success",
 			"data":   bkkStopSchedule,
+		})
+	}
+
+	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		"status":  "error",
+		"message": "Invalid or unsupported \"provider\" parameter!",
+	})
+}
+
+func GetStopArrivalsAndDepartures(c *fiber.Ctx) error {
+	var provider string = c.Query("provider", "")
+	var stopIdsQuery string = c.Query("stop_ids", "")
+	var stopIds []string = strings.Split(stopIdsQuery, ",")
+	var tripIdsQuery string = c.Query("trip_ids", "")
+	var tripIds []string = strings.Split(tripIdsQuery, ",")
+	var dateTimeStr string = c.Query("time", "")
+	dateTime, err := strconv.ParseInt(dateTimeStr, 10, 64)
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Missing or invalid \"time\" parameter!",
+		})
+	}
+	if stopIdsQuery == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Missing or invalid \"stop_ids\" parameter!",
+		})
+	}
+	if provider == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Missing or invalid \"provider\" parameter!",
+		})
+	}
+
+	if tripIdsQuery == "" {
+		tripIds = []string{}
+	}
+
+	if strings.ToLower(provider) == "bkk" {
+		// get stop arrivals and departures from BKK
+		status, bkkStopArrivalsAndDepartures := clients.BKKGetStopArrivalsAndDepartures(stopIds, dateTime, tripIds)
+		if status != fiber.StatusOK {
+			return c.Status(status).JSON(fiber.Map{
+				"status":  "error",
+				"message": "Failed to get stop arrivals and departures from BKK API!",
+			})
+		}
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"status": "success",
+			"data":   bkkStopArrivalsAndDepartures,
 		})
 	}
 
