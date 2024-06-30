@@ -13,6 +13,7 @@ func main() {
 	app.Get("/endpoints", handlers.Endpoints)
 	app.Get("/version", handlers.Version)
 
+	// start the server
 	err := app.Listen(":3002")
 	if err != nil {
 		panic(err)
