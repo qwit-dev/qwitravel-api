@@ -6,7 +6,11 @@ import (
 )
 
 func main() {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		Prefork:      true,
+		ServerHeader: "Fiber",
+		AppName:      "QwITravel API v1.0.0",
+	})
 
 	// base routes
 	app.Get("/", handlers.Home)
