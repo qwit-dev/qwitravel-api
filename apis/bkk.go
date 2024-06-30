@@ -9,3 +9,4 @@ const BKKDialect = "otp" // can be "mobile" or "otp"
 // stop related
 const BKKStopSchedule = BKKBase + "/" + BKKDialect + "/api/where/schedule-for-stop"
 const BKKStopArrivalsAndDepartures = BKKBase + "/" + BKKDialect + "/api/where/arrivals-and-departures-for-stop"
+const BKKStopRouteDetails = BKKBase + "/" + BKKDialect + "/api/where/route-details-for-stop"

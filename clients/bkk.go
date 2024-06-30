@@ -125,3 +125,51 @@ func BKKGetStopArrivalsAndDepartures(stopIds []string, dateTime int64, routeIds 
 
 	return fiber.StatusOK, finalData
 }
+
+func BKKGetStopRouteDetails(stopId string) (int, models.BKKStopRouteDetails) {
+	if stopId == "" {
+		return fiber.ErrBadRequest.Code, models.BKKStopRouteDetails{}
+	}
+
+	var finalData models.BKKStopRouteDetails
+
+	client := &http.Client{}
+	req, err := http.NewRequest(
+		"GET",
+		apis.BKKStopRouteDetails+
+			"?stopId="+stopId+
+			"&appVersion=1.0.0&version=4&includeReferences=false"+
+			"&key="+os.Getenv("BKK_API_KEY"),
+		nil,
+	)
+	if err != nil {
+		fmt.Println(err)
+		return fiber.ErrInternalServerError.Code, models.BKKStopRouteDetails{}
+	}
+
+	req.Header.Set("accept", "application/json")
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return fiber.ErrInternalServerError.Code, models.BKKStopRouteDetails{}
+	}
+
+	if resp.StatusCode != 200 {
+		return resp.StatusCode, models.BKKStopRouteDetails{}
+	}
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return fiber.ErrInternalServerError.Code, models.BKKStopRouteDetails{}
+	}
+
+	err = json.Unmarshal(body, &finalData)
+	if err != nil {
+		fmt.Println(err)
+		return fiber.ErrInternalServerError.Code, models.BKKStopRouteDetails{}
+	}
+
+	return fiber.StatusOK, finalData
+}
